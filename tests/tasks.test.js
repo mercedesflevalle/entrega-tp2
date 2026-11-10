@@ -37,3 +37,15 @@ test('vista vencidas: solo activas con fecha pasada', () => {
   assert.deepEqual(selectTasks(tasks, { view: 'vencidas' }).map(item => item.id), ['vieja']);
   assert.equal(isOverdue(tasks[1]), false);
 });
+import { buildIcs } from '../src/domain/calendar.js';
+import { subjectColor } from '../src/domain/subjects.js';
+test('el color de la materia es estable y no depende de tildes ni mayúsculas', () => {
+  assert.deepEqual(subjectColor('Matemática'), subjectColor('  matematica '));
+});
+test('el calendario genera un evento de día completo por entrega', () => {
+  const ics = buildIcs([{ ...task, id: 'a', dueDate: '2026-11-30', notes: 'Línea 1, línea 2' }], new Date('2026-11-10T10:00:00Z'));
+  assert.match(ics, /DTSTART;VALUE=DATE:20261130\r\nDTEND;VALUE=DATE:20261201/);
+  assert.match(ics, /SUMMARY:Entrega: .*Parcial/);
+  assert.match(ics, /DESCRIPTION:Línea 1\\, línea 2/);
+  assert.equal(ics.match(/BEGIN:VEVENT/g).length, 1);
+});

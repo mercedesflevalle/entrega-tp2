@@ -1,6 +1,6 @@
 # Entrega
 
-Base del TP 2 de Desarrollo Frontend II. Organizador de trabajos, parciales y proyectos para estudiantes: materia, fecha límite, prioridad, notas y tres estados. React + Vite; integración preparada con Firebase Authentication anónima y Cloud Firestore.
+Base del TP 2 de Desarrollo Frontend II. Organizador de trabajos, parciales y proyectos para estudiantes: materia, fecha límite, prioridad, notas, tres estados y una checklist de pasos dentro de cada entrega. Incluye vista de vencidas, color por materia y exportación al calendario (.ics). React + Vite; integración preparada con Firebase Authentication anónima y Cloud Firestore.
 
 ## Empezar
 
@@ -47,7 +47,7 @@ Las variables `VITE_` se incluyen en el navegador. Solo llevan configuración we
 
 ### Modelo y operaciones
 
-Ruta: `users/{uid}/tasks/{taskId}`. `uid` lo proporciona Authentication. Cada documento guarda `title` (1–100), `subject` (1–60), `dueDate` (YYYY-MM-DD), `priority` (`normal` o `alta`), `status` (`pendiente`, `en-curso`, `entregada`), `notes` (hasta 1000), `createdAt` y `updatedAt` (timestamps del servidor).
+Ruta: `users/{uid}/tasks/{taskId}`. `uid` lo proporciona Authentication. Cada documento guarda `title` (1–100), `subject` (1–60), `dueDate` (YYYY-MM-DD), `priority` (`normal` o `alta`), `status` (`pendiente`, `en-curso`, `entregada`), `notes` (hasta 1000), `steps` (lista opcional de hasta 15 pasos `{ text, done }`), `createdAt` y `updatedAt` (timestamps del servidor).
 
 `src/data/firebase.js`: inicialización, sesión persistente y operaciones. `onSnapshot` consulta y escucha cambios; `addDoc` crea; `updateDoc` modifica; `deleteDoc` elimina. Las reglas verifican identidad, campos, tipos, longitudes, estados y timestamps; la validación de calendario completo se hace además en el cliente. No se utiliza un backend propio ni se necesitan índices compuestos.
 
@@ -62,7 +62,10 @@ src/App.jsx                 Estado y composición de la pantalla
 src/components/TaskForm.jsx Formulario validado en un diálogo
 src/components/TaskCard.jsx Tarjeta, estado y acciones
 src/hooks/useTasks.js       Suscripción, carga, errores y reintento
-src/domain/tasks.js         Validación, fechas, filtros y orden
+src/domain/tasks.js         Validación, pasos, fechas, filtros y orden
+src/domain/subjects.js      Color estable por materia
+src/domain/calendar.js      Exportación a calendario (.ics)
+src/version.js              Número de versión visible en el pie
 src/data/repository.js      Selección explícita demo / firebase
 src/data/demo.js            Datos ficticios y almacenamiento local
 src/data/firebase.js        SDK real y CRUD por usuario
@@ -81,17 +84,19 @@ docs/                       Bitácora y plan de pruebas
 5. Verificar CRUD y recarga desde la URL publicada. Las reglas se publican por separado en Firebase; Vercel no las actualiza.
 6. Hacer una mejora propia, commit y push; comprobar que Vercel terminó el nuevo build y que el cambio se ve desde la URL final. Completar la bitácora con evidencia real.
 
-## Estado de esta base
+## Versiones
 
-- Implementados frontend, demo, adaptador Firebase, autenticación anónima, reglas y documentación.
-- Verificados seis tests de lógica, build de producción en demo y compilación del modo Firebase (ver resultados finales de la entrega).
-- Pendientes: proyecto Firebase real, publicar reglas, comprobar permisos con el emulador o cuentas de prueba, pruebas visuales y de uso en navegador, repositorio GitHub, publicación Vercel y pruebas reales de persistencia.
-- La base es una versión de partida. No se presentan tres versiones publicadas ni capturas inventadas. La consigna exige al menos tres versiones: completar la evolución documentada en `docs/BITACORA.md`.
-- Para la entrega académica también faltan los enlaces finales, el informe completado con resultados reales y el mini video de explicación.
+El número de versión aparece en el pie de la app: sirve para comprobar qué versión está publicada en Vercel.
+
+- **v1.0**: organizador con CRUD en Firestore, filtros, resumen de avance y vista de próximos 7 días.
+- **v2.0**: pasos (checklist) dentro de cada entrega, guardados en Firestore; marcar un paso pasa la entrega a En curso; vista y aviso de entregas vencidas. **Requiere volver a publicar `firestore.rules`** (se agregó el campo `steps`).
+- **v3.0**: color estable por materia, borde lateral para escanear la lista, cuenta regresiva en la próxima entrega, resaltado de lo que vence hoy o mañana y exportación al calendario (.ics) por entrega o de toda la lista.
+
+El detalle de cada iteración está en `docs/BITACORA.md`.
 
 ## Diseño y recursos
 
-Interfaz de cursada con navegación lateral, resumen, próxima entrega y tarjetas. Verde oscuro para acciones, tonos neutros para lectura y etiquetas con texto para los estados; la urgencia no depende solo del color. Formularios con etiquetas, foco visible, diálogos nativos y confirmación antes de eliminar. Layout adaptable a celular. Fuentes DM Sans y Manrope desde Google Fonts con fallback local sans-serif; requiere conexión para las fuentes, pero no para el diseño base. Iconos Lucide (ISC). No se usan fotografías ni imágenes generadas.
+Interfaz de cursada con navegación lateral, resumen, próxima entrega y tarjetas. Cada materia tiene un color propio (sin rojo, que queda reservado para lo vencido). Verde oscuro para acciones, tonos neutros para lectura y etiquetas con texto para los estados; la urgencia no depende solo del color. Formularios con etiquetas, foco visible, diálogos nativos y confirmación antes de eliminar. Layout adaptable a celular. Fuentes DM Sans y Manrope desde Google Fonts con fallback local sans-serif; requiere conexión para las fuentes, pero no para el diseño base. Iconos Lucide (ISC). No se usan fotografías ni imágenes generadas.
 
 ## Documentación oficial
 

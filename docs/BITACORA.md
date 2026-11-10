@@ -1,56 +1,89 @@
-# Bitácora del TP
+# Bitácora del TP 2 · Entrega
 
-## Base preparada el 3 de noviembre de 2026
+> Los campos marcados como **[COMPLETAR]** se llenan con datos reales: fechas, links, capturas y resultados de las pruebas.
 
-**Idea:** Entrega, un organizador de trabajos y parciales para estudiantes. Agrega contexto a un gestor de tareas mediante materias, fechas límite, prioridad, un resumen de avance y una vista de próximos siete días.
+## Idea inicial
 
-**Desarrollo realizado:** modelo y validaciones; repositorios separados para demo y Firebase; operaciones CRUD; pantalla React con componentes, formulario y filtros; mensajes de carga, éxito y error; estilos responsive; reglas por usuario; documentación de configuración e integración.
+**Necesidad:** en la facultad las entregas se acumulan en distintas materias y cada TP tiene varias partes. Las apps de tareas genéricas no muestran cuánto falta para cada entrega ni cuánto avancé dentro de un mismo trabajo.
 
-**Decisiones de diseño:** una acción principal para crear; tarjetas con materia antes del título; fechas y estados visibles; próxima entrega destacada; navegación por activas, semana y finalizadas. Paleta verde sobria, superficies claras y tipografía legible. Los estados incluyen texto. El listado usa tres columnas en escritorio ancho, dos en tamaños intermedios y una en celular.
+**Público:** estudiantes universitarios, en especial de carreras de diseño, que manejan varios TPs, parciales y proyectos en paralelo.
 
-**IA utilizada:** Codex, para leer la consigna, generar y revisar la base de React, separar los adaptadores de datos, preparar reglas y documentación. Instrucción del usuario: “Quiero que me prepares la base para mandarle y luego me hagas un doc con un resumen de lo que hiciste y los pasos a seguir.” No se generaron imágenes. Cada alumno debe revisar el código y poder explicar las operaciones del SDK antes de presentar.
+**Qué se guarda:** cada entrega con título, materia, fecha límite, prioridad, estado, notas y pasos. Ruta en Firestore: `users/{uid}/tasks/{taskId}`.
 
-**Verificación realizada:** seis tests de lógica y compilación de producción. La verificación visual por navegador y la integración con servicios reales quedan pendientes. La herramienta de navegador de la sesión no estaba disponible. El build inicial encontró una restricción de lectura del sandbox; se resolvió ejecutando la compilación con permiso para la herramienta, sin cambiar código de la aplicación.
+**Vuelta de tuerca respecto de un gestor de tareas común:** la unidad no es la tarea suelta sino la entrega, con su materia, su fecha y una checklist interna de pasos. Se suma la lectura de urgencia (vencidas, vence hoy o mañana, cuenta regresiva) y la exportación al calendario.
 
-**Alcance:** esta preparación es una base local y no acredita tres versiones publicadas. No existen todavía enlaces ni evidencias de una publicación real. Las etapas siguientes son trabajo por realizar y registrar.
+---
 
-## Versión 1 conectada por completar
+## Versión 1 · Base funcional conectada a Firebase
 
-- Crear proyecto Firebase, activar autenticación y publicar reglas.
-- Configurar variables y verificar CRUD real con recarga.
-- Crear GitHub y publicar Vercel.
-- Anotar fecha, commit, URL del despliegue, resultado de pruebas y dificultades.
-- Agregar capturas propias de escritorio, móvil y datos en Firebase, sin credenciales.
+**Fecha:** [COMPLETAR] · **Commit:** "V1: versión visible en el pie…" · **URL:** [COMPLETAR]
 
-## Versión 2 con mejoras por completar
+**Qué tiene:** alta, edición, cambio de estado y borrado de entregas en Firestore; búsqueda sin tildes; filtro por materia; orden por fecha o prioridad; vistas Mis entregas, Próximos 7 días, Entregadas y Todas; resumen de avance; próxima entrega destacada; mensajes de carga, éxito y error; confirmación antes de eliminar; diseño responsive.
 
-- Elegir una mejora comprobable: por ejemplo, agregar una vista de entregas vencidas o exportar las entregas a CSV.
-- Registrar necesidad, cambios concretos y pruebas efectuadas.
-- Commit y push; verificar nuevo build y comportamiento en Vercel.
-- Agregar capturas comparables con la versión anterior y describir el cambio.
+**Cambios respecto de la base generada con IA:** se reemplazaron las iniciales de plantilla del perfil por un ícono (la sesión es anónima, no hay nombre real) y se agregó el número de versión en el pie para poder comprobar en Vercel qué versión está publicada.
 
-## Versión 3 final por completar
+**Decisiones de diseño:** paleta verde sobria, porque la app tiene que bajar la ansiedad de la cursada y no sumar ruido. Una sola acción principal ("Nueva entrega"). La materia aparece antes del título porque es como los estudiantes agrupan mentalmente sus pendientes. Los estados siempre llevan texto: no dependen solo del color.
 
-- Recoger una observación de uso real y corregirla; anotar qué cambió y por qué.
-- Repetir validaciones, CRUD, recarga, permisos y revisión responsive.
-- Registrar commit y despliegue final; completar informe y mini video.
+**Pruebas:** [COMPLETAR: crear, recargar, editar, borrar y verificar cada cambio en Firestore → Data. Probar en el celular.]
 
-## Registro para completar en cada iteración
+**Dificultades y solución:** [COMPLETAR: por ejemplo, variables de entorno, dominio autorizado en Firebase Auth, Root Directory en Vercel.]
 
-Fecha:
+**Capturas:** [COMPLETAR: escritorio, celular, documento en Firestore, deploy en Vercel.]
 
-Versión y commit:
+---
 
-Necesidad detectada:
+## Versión 2 · Pasos dentro de cada entrega y vencidas
 
-Cambios de diseño o funcionalidad:
+**Fecha:** [COMPLETAR] · **Commit:** "V2: pasos por entrega guardados en Firestore…" · **URL:** [COMPLETAR]
 
-Uso de IA e instrucciones representativas:
+**Necesidad detectada:** probando la V1 con mis propias entregas, el estado "En curso" decía poco: un TP grande puede estar "en curso" durante semanas. También, una entrega con la fecha pasada quedaba mezclada con las demás y era fácil no verla.
 
-Pruebas y resultados observados:
+**Cambios de funcionalidad:**
+- Checklist de pasos dentro de cada entrega (hasta 15), editable desde el formulario y marcable desde la tarjeta. Se guarda en Firestore en el campo `steps`.
+- Al marcar el primer paso de una entrega pendiente, pasa sola a "En curso".
+- Nueva vista "Vencidas", contador en el menú y aviso arriba de la lista.
 
-Dificultades y solución:
+**Cambios de diseño:** barra de progreso de pasos en la tarjeta, plegable para que la grilla no crezca de más. Las tarjetas dejaron de estirarse a la altura de la vecina. El rojo apagado se usa solo para lo vencido.
 
-URL y estado del despliegue:
+**Cambio en Firebase:** se actualizaron las reglas para aceptar el campo `steps` (lista de hasta 15 elementos) y se volvieron a publicar en la consola de Firebase. Sin ese paso, guardar una entrega con pasos devolvía "permiso denegado".
 
-Capturas o evidencias:
+**Pruebas:** [COMPLETAR: crear una entrega con pasos, marcar uno, recargar, verificar `steps` en Firestore; poner una fecha pasada y verla en Vencidas.]
+
+**Dificultades y solución:** [COMPLETAR]
+
+**Capturas:** [COMPLETAR: antes/después de la tarjeta con pasos y la vista Vencidas.]
+
+---
+
+## Versión 3 · Lectura rápida por materia y calendario
+
+**Fecha:** [COMPLETAR] · **Commit:** "V3: color por materia, exportar al calendario…" · **URL:** [COMPLETAR]
+
+**Necesidad detectada:** con varias entregas, todas las tarjetas se veían iguales y había que leer cada etiqueta para saber de qué materia eran. Además, los estudiantes ya usan Google Calendar o el calendario del celular y no quieren cargar las fechas dos veces.
+
+**Cambios de diseño:**
+- Cada materia tiene un color propio, siempre el mismo (se calcula a partir del nombre). Se ve en la etiqueta y en un borde lateral de la tarjeta, para escanear la lista sin leer.
+- Se excluyó el rojo de la paleta de materias: en una primera prueba "Comunicación" quedó roja y se confundía con una entrega vencida.
+- La próxima entrega muestra una cuenta regresiva grande ("3 días", "Hoy vence", "1 día tarde").
+- Las entregas que vencen hoy o mañana tienen un contorno cálido que las separa del resto.
+
+**Cambios de funcionalidad:** exportar al calendario (.ics) una entrega desde su tarjeta o todas las entregas activas visibles desde la barra de filtros.
+
+**Pruebas:** [COMPLETAR: importar el .ics en Google Calendar; revisar que dos entregas de la misma materia tengan el mismo color; repetir CRUD y recarga desde la URL final.]
+
+**Dificultades y solución:** [COMPLETAR]
+
+**Capturas:** [COMPLETAR: comparación V1 / V2 / V3 de la pantalla principal.]
+
+---
+
+## Uso de IA
+
+- **Codex:** generó la base del proyecto a partir de la consigna (estructura de componentes, adaptador de Firebase, reglas y documentación).
+- **Claude:** revisó qué faltaba respecto de la consigna, propuso y programó las mejoras de V2 y V3, y ayudó con la documentación.
+
+Instrucciones representativas:
+- "Tengo que hacer este TP 2 para la materia Frontend 2. Tengo una base del TP pero no sé qué faltaría."
+- [COMPLETAR con tus pedidos: por ejemplo, ajustes de color, errores de Firebase o Vercel que le pasaste a la IA.]
+
+Todo el código se revisó y se probó en el navegador antes de publicarlo.

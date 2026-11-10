@@ -16,6 +16,14 @@
 8. Revisar 375, 768, 1024 y 1440 px: sin superposiciones ni scroll horizontal; probar títulos de 100 caracteres, materia de 60 y notas de 1000. En móvil revisar además el campo fecha y el teclado.
 9. Bloquear el almacenamiento del navegador o la red y revisar que los errores no informan un guardado exitoso.
 
+## Funciones agregadas en v2 y v3
+
+1. Crear una entrega con 3 pasos; marcar uno desde la tarjeta: si estaba Pendiente pasa a En curso. Verificar el campo `steps` en Firestore.
+2. Recargar: los pasos marcados siguen marcados.
+3. Poner una fecha pasada: aparece en Vencidas, con contador en el menú y aviso arriba.
+4. Exportar una entrega y toda la lista al calendario; abrir el .ics en Google Calendar o en el calendario del celular.
+5. Revisar que dos entregas de la misma materia tengan el mismo color.
+
 ## Integración Firebase pendiente
 
 1. Activar `firebase`, publicar reglas y habilitar sesión anónima. Confirmar que no se muestran ejemplos de demo.
