@@ -4,7 +4,8 @@ service cloud.firestore {
     function owner(uid) { return request.auth != null && request.auth.uid == uid; }
     function validTask(data) {
       return data.keys().hasAll(['title', 'subject', 'dueDate', 'priority', 'status', 'notes', 'createdAt', 'updatedAt'])
-        && data.keys().hasOnly(['title', 'subject', 'dueDate', 'priority', 'status', 'notes', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['title', 'subject', 'dueDate', 'priority', 'status', 'notes', 'steps', 'createdAt', 'updatedAt'])
+        && (!('steps' in data) || (data.steps is list && data.steps.size() <= 15))
         && data.title is string && data.title.size() > 0 && data.title.size() <= 100
         && data.subject is string && data.subject.size() > 0 && data.subject.size() <= 60
         && data.notes is string && data.notes.size() <= 1000
